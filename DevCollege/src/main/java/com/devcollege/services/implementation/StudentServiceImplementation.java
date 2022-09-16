@@ -84,8 +84,11 @@ public class StudentServiceImplementation implements StudentService {
 				message.put("Successfully deleted student details :", studentId);
 				return message;
 			}
+//			enrollmentRepository.deleteById(e.getEnrolId());
+//			studentRepository.deleteById(student.getStudentId());
 		}
 		studentRepository.deleteById(studentId);
+//		studentRepository.save(student);
 		Map<String, String> message = new HashMap<String, String>();
 		message.put("Successfully deleted student details :", studentId);
 		return message;

@@ -46,7 +46,7 @@ public class EnrollmentServiceImplementation implements EnrollmentService {
 
 			Calendar calender = Calendar.getInstance();
 			calender.setTime(enrollment.getCourseStartDatetime());
-			calender.add(Calendar.HOUR_OF_DAY, enrolledCourse.getCourseDuration());
+			calender.add(Calendar.HOUR, enrolledCourse.getCourseDuration());
 			enrollment.setCourseEndDatetime(calender.getTime());
 
 			Enrollment getId = enrollmentRepository.save(enrollment);
@@ -124,9 +124,8 @@ public class EnrollmentServiceImplementation implements EnrollmentService {
 
 		List<EnrollmentDto> enrolledList = new ArrayList<>();
 
-		if(enrollments.contains(studentId)) {
-
-			for (Enrollment enrollment : enrollments) {
+		for (Enrollment enrollment : enrollments) {
+			if(enrollment.getStudentId().equals(studentId)) {
 				EnrollmentDto enrollmentDto = new EnrollmentDto();
 				enrollmentDto.setEnrolId(enrollment.getEnrolId());
 				enrollmentDto.setCourseId(enrollment.getCourseId());
@@ -141,10 +140,12 @@ public class EnrollmentServiceImplementation implements EnrollmentService {
 				enrollmentDto.setStudentLink("http://localhost:8080/student/get/" + checkStudent.getStudentId());
 				enrolledList.add(enrollmentDto);
 			}
-			return enrolledList;
-		} else
-			throw new DataNotFoundException("studentId","",checkStudent.getStudentName());
 
+		}
+		if(enrolledList.size() == 0){
+			throw new DataNotFoundException("studentId","",checkStudent.getStudentName());
+		} else
+			return enrolledList;
 	}
 
 	@Override
